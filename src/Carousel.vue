@@ -333,7 +333,7 @@ export default {
   },
   watch: {
     value(val) {
-      if (val !== this.currentPage) {
+      if (typeof window !== "undefined" && val !== this.currentPage) {
         this.goToPage(val);
         this.render();
       }
@@ -378,18 +378,24 @@ export default {
   },
   computed: {
     getTransitionStart() {
-      for (let name in transitionStartNames) {
-        if (name in window) {
-          return transitionStartNames[name];
+      if (typeof window !== "undefined") {
+        for (let name in transitionStartNames) {
+          if (name in window) {
+            return transitionStartNames[name];
+          }
         }
       }
+      return transitionStartNames[0];
     },
     getTransitionEnd() {
-      for (let name in transitionEndNames) {
-        if (name in window) {
-          return transitionEndNames[name];
+      if (typeof window !== "undefined") {
+        for (let name in transitionEndNames) {
+          if (name in window) {
+            return transitionEndNames[name];
+          }
         }
       }
+      return transitionEndNames[0];
     },
     /**
      * Given a viewport width, find the number of slides to display
