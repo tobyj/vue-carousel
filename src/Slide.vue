@@ -49,12 +49,15 @@ export default {
 
       return activeSlides;
     },
+    activeSlideIndex() {
+      return this.activeSlides.indexOf(this._uid);
+    },
     /**
      * `isActive` describes whether a slide is visible
      * @return {Boolean}
      */
     isActive() {
-      return this.activeSlides.indexOf(this._uid) >= 0;
+      return this.activeSlideIndex >= 0;
     },
     /**
      * `isCenter` describes whether a slide is in the center of all visible slides
@@ -64,10 +67,7 @@ export default {
     isCenter() {
       const { breakpointSlidesPerPage } = this.carousel;
       if (breakpointSlidesPerPage % 2 === 0 || !this.isActive) return false;
-      return (
-        this.activeSlides.indexOf(this._uid) ===
-        Math.floor(breakpointSlidesPerPage / 2)
-      );
+      return this.activeSlideIndex === Math.floor(breakpointSlidesPerPage / 2);
     },
     /**
      * `isAdjustableHeight` describes if the carousel adjusts its height to the active slide(s)

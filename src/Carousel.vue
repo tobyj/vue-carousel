@@ -916,7 +916,7 @@ export default {
       this.$emit("transition-end");
     },
     debouncedOnResize() {
-      debounce(this.onResize, this.refreshRate);
+      debounce(this.onResize(), this.refreshRate);
     }
   },
   mounted() {
@@ -945,7 +945,14 @@ export default {
       this.handleTransitionEnd
     );
 
-    this.$emit("mounted");
+    this.$nextTick(() => {
+      // a11y - set first slide as not aria-hidden
+      const firstSlide = this.getSlide(0);
+      if (firstSlide && firstSlide.$el) {
+        firstSlide.$el.ariaHidden = false;
+      }
+      this.$emit("mounted");
+    });
 
     // when autoplay direction is backward start from the last slide
     if (this.autoplayDirection === "backward") {
